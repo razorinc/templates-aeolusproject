@@ -1,0 +1,18 @@
+- if authenticated?
+  %h2
+    You're logged in #{session[:user_name]}!
+    %a{:href=>"/authenticate/sign_out"} Sign out
+- else
+  %h2
+    %a{:href=>"/authenticate/auth/twitter"} Sign in
+
+
+%h1
+  Hej indexu!
+
+  %p
+    =flash[:notice]
+  %p
+    =flash[:warning]
+  %p
+    =flash[:error]
