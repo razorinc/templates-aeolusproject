@@ -19,8 +19,8 @@ in order to download all the needed gems.
 
 
 Since, it's a rack application to execute it, just run on your terminal :
-    $ rackup
 
+    $ rackup
 
 Due to the authentication dependencies, you also will need the environmental parameters like
     <table>
@@ -49,3 +49,12 @@ Due to the authentication dependencies, you also will need the environmental par
          </td>
         </tr>
      </table>
+
+
+Example:
+--------
+
+An easy example mostly used in development is to define the env variables on the command line in
+order to test it with different providers:
+
+   $ TWITTER_SECRET="0edeadb33f" TWITTER_KEY="013370dEadbeef80238" rackup
