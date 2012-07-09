@@ -160,5 +160,6 @@ end
 # End
 
 DataMapper.finalize
-DataMapper.auto_migrate! unless File.exists?(DB_PATH)
+DataMapper.auto_migrate! unless DataMapper.repository(:default).
+                                adapter.storage_exists?('Authentication')
 DataMapper.auto_upgrade!
