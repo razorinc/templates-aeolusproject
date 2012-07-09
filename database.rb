@@ -6,11 +6,12 @@ require 'dm-migrations/migration_runner'
 
 DB_PATH=File.join(Dir.pwd,"templates.sqlite3")
 
-DataMapper::Logger.new(STDOUT, :debug) unless ENV['RACK_ENV'] == "production"
+ataMapper::Logger.new(STDOUT, :debug) unless ENV['RACK_ENV'] == "production"
 DataMapper.setup(:default, 'sqlite::memory:') if ENV['RACK_ENV']=="test"
 DataMapper.setup(:default, "sqlite:///#{DB_PATH}")
 DataMapper.setup(:default,
-                "mysql://#{DB_USER}:#{DB_PASSWORD}@#{DB_SERVER}/#{DB_DATABASE}") if ENV["RACK_ENV"] == "production"
+                "mysql://#{DB_USER}:#{DB_PASSWORD}@#{DB_SERVER}/#{DB_DATABASE}") if
+                    ENV["RACK_ENV"] == "production"
 
 class User
   include DataMapper::Resource
@@ -133,7 +134,7 @@ end
 
 # - END
 
-# Migration to create the Trigger
+# Migration to create the Trigger (Valid in MySQL and SQLite)
 migration 1, :create_people_table do
   up do
     execute <<-EOF
