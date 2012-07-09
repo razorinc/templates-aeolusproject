@@ -1,8 +1,17 @@
 # -*- coding: utf-8 -*-
+
+unless Kernel.respond_to?(:require_relative)
+  module Kernel
+    def require_relative(path)
+      require File.join(File.dirname(caller[0]), path.to_str)
+    end
+  end
+end
+
 require 'bundler/setup'
 Bundler.require(:web)
-require 'helpers'
-require 'database'
+require_relative 'helpers'
+require_relative 'database'
 
 class AppBase < Sinatra::Base
   set :static, true
@@ -18,26 +27,46 @@ class Application < AppBase
   set :views, Proc.new{File.join(File.dirname(__FILE__),'views', name.downcase)}
 
   before do
-    puts "Application #{request.referer}"
-    puts "authenticated? #{authenticated?}"
+    puts "authenticated? = #{authenticated?}"
+    puts "return_to= #{session[:return_to]}"
   end
+
+  not_found do
+    haml ['%h1= Four Oh Four!', '%h2= Doh!'].join
+  end
+
   get '/' do
     puts "DEBUG: #{session.inspect}" unless ENV['DEBUG_IT'].nil?
     # Default will be 5
     @last_inserted = Entry.last_inserts
     # Default will be 5
     @most_requested = Entry.popular
+
     haml :index
+  end
+
+  get '/entry/new' do
+    haml :new_entry if authenticated?
+    (flash[:error]="You're not authenticated";
+     redirect to("/")) unless authenticated?
+  end
+
+  post '/entry/new' do
+    # a new entry has:
+    # username, title
+    # image template,deployable template,<< tags >>
+    user = User::first(:id=>session[:user_id])
+    entry = user.entries.create!(:name=>params[:name])
   end
 
   get '/entry/:id' do
     entry ||= Entry::first(:name=>params[:id])
-    (flash[:error] = "The element wasn't found"; redirect to("/")) if entry.nil?
+    (flash[:error] = "The element wasn't found";
+     redirect to(session[:return_to])) if entry.nil?
     haml :show_entry
   end
 
 
-#  it was: get %r{/entry/:id/raw/(image|deployable)/([^\/?#]+)} do |kind,id|
   get %r{/entry/([^\/?#]+)/raw/(image|deployable).xml} do |entry, kind|
     element ||= Entry::first(:name=>params[:id])
     halt 404 if element.nil?
@@ -50,7 +79,7 @@ class Application < AppBase
       else
         halt 404
     end
-    "#{kind} = #{entry}"
+    "#{kind} = #{entry}" unless ENV['DEBUG_IT'].nil?
   end
 
 end

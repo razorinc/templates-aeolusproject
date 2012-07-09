@@ -1,7 +1,7 @@
 source :rubygems
 
 gem "thin"
-gem "system_timer"
+gem "system_timer", :platforms => :ruby_18
 
 group :database do
   gem 'uuidtools'

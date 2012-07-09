@@ -1,13 +1,21 @@
+unless Kernel.respond_to?(:require_relative)
+  module Kernel
+    def require_relative(path)
+      require File.join(File.dirname(caller[0]), path.to_str)
+    end
+  end
+end
+
 require 'bundler/setup'
 Bundler.require
-require 'app'
+require './app.rb'
 
 map '/' do
   run Application
 end
 
-map '/api' do
 # Should support api
+map '/api' do
   run Api
 end
 

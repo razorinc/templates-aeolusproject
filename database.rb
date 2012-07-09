@@ -14,6 +14,7 @@ class User
                         :default => proc { UUIDTools::UUID.random_create }
   # Each user may log in using different methods:
   has n, :authentications
+  has n, :entries
 
 end
 

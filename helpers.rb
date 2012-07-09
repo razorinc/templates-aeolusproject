@@ -42,29 +42,29 @@ module Sinatra
       oaeuh = omniauth['extra'] && (omniauth['extra']['user_hash'] ||
                                     omniauth['extra']['raw_info'])
       oaui = omniauth['user_info'] || omniauth['info']
-      if authentication_route == 'facebook'
+      case authentication_route
+        when "facebook"
         @authhash[:email] = oaeuh['email'] || ''
         @authhash[:name] = oaeuh['name'] || ''
         @authhash[:uid] = oaeuh['name'] || ''
         @authhash[:provider] = omniauth['provider'] || ''
-      elsif authentication_route == "twitter"
-        puts "Using twitter!"
+      when "twitter"
         @authhash[:email] = oaui['email'] || ''
         @authhash[:name] = omniauth['info']['nickname'] || ''
 #        @authhash[:nick] = oaui['screen_name'] || ''
         @authhash[:uid] = (oaeuh['id'] || '').to_s
         @authhash[:provider] = omniauth['provider'] || ''
-      elsif authentication_route == 'github'
+      when 'github'
         @authhash[:email] = oaui['email'] || ''
         @authhash[:name] = oaui['name'] || ''
         @authhash[:uid] = (oaeuh['id'] || '').to_s
         @authhash[:provider] = omniauth['provider'] || ''
-      elsif ['google', 'yahoo', 'linked_in', 'twitter', 'myopenid', 'openid', 'open_id'].index(authentication_route) != nil
+      when 'google', 'yahoo', 'linked_in', 'twitter', 'myopenid', 'openid', 'open_id'
         @authhash[:email] = oaui['email'] || ''
         @authhash[:name] = oaui['name'] || ''
         @authhash[:uid] = (omniauth['uid'] || '').to_s
         @authhash[:provider] = omniauth['provider'] || ''
-      elsif authentication_route == 'aol'
+      when 'aol'
         @authhash[:email] = oaui['email'] || ''
         @authhash[:name] = oaui['name'] || ''
         @authhash[:uid] = (omniauth['uid'] || '').to_s
@@ -121,14 +121,19 @@ module Sinatra
           session[:user_id] = auth.user.id
           session[:authentication_provider] = auth.provider   # They're now signed in using the new account
           session[:user_name] = @authhash[:name] if @authhash[:name] != ''
-          redirect to('/auth/signedin')
+          redirect to(session[:return_to])
         end
 
         # this is a new user; add them
         @current_user = User.create()
         session[:user_id] = @current_user.id
         session[:user_name] = @authhash[:name] if @authhash[:name] != ''
-        auth = current_user.authentications.create!(:provider => @authhash[:provider], :uid => @authhash[:uid], :user_name => @authhash[:name], :user_email => @authhash[:email])
+        auth = current_user.authentications.create!(
+                                                :provider => @authhash[:provider],
+                                                :uid => @authhash[:uid],
+                                                :user_name => @authhash[:name],
+                                                :user_email => @authhash[:email]
+                                                )
         session[:authentication_provider] = auth.provider
 #        puts env['omniauth.auth'].to_yaml
       end
