@@ -14,6 +14,7 @@ require_relative 'helpers'
 require_relative 'database'
 
 class AppBase < Sinatra::Base
+  # @mfojtik: I think this two are not needed
   set :static, true
   set :public_folder, File.join(File.dirname(__FILE__),'public') # was Proc.new
 
@@ -57,6 +58,7 @@ class Application < AppBase
     # image template,deployable template,<< tags >>
     user = User::first(:id=>session[:user_id])
     entry = user.entries.create!(:name=>params[:name])
+    # @mfojtik: where is the redirect ?
   end
 
   get '/entry/:id' do

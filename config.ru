@@ -11,6 +11,7 @@ Bundler.require
 require './app.rb'
 
 map '/' do
+  # @mfojtik: class name 'Application' could be ambithius, Sinatra already has class with that name.
   run Application
 end
 
