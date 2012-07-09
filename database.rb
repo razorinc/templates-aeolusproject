@@ -1,11 +1,16 @@
 # -*- coding: utf-8 -*-
 
 Bundler.require(:database)
+load "config.rb"
 require 'dm-migrations/migration_runner'
+
+DB_PATH=File.join(Dir.pwd,"templates.sqlite3")
 
 DataMapper::Logger.new(STDOUT, :debug) unless ENV['RACK_ENV'] == "production"
 DataMapper.setup(:default, 'sqlite::memory:') if ENV['RACK_ENV']=="test"
-DataMapper.setup(:default, "sqlite:////#{Dir.pwd}/templates.sqlite3")
+DataMapper.setup(:default, "sqlite:///#{DB_PATH}")
+DataMapper.setup(:default,
+                "mysql://#{DB_USER}:#{DB_PASSWORD}@#{DB_SERVER}/#{DB_DATABASE}") if ENV["RACK_ENV"] == "production"
 
 class User
   include DataMapper::Resource
@@ -119,7 +124,7 @@ class Tag
   include DataMapper::Resource
 
   property :id,   Serial
-  property :name, String, :required=>true, :unique => true, :unique_index => true
+  property :name, String, :required=>true, :unique =>true, :unique_index =>true
   has n, :entry_tags
 
   has n, :entries,
@@ -155,5 +160,5 @@ end
 # End
 
 DataMapper.finalize
-DataMapper.auto_migrate!
+DataMapper.auto_migrate! unless File.exists?(DB_PATH)
 DataMapper.auto_upgrade!
