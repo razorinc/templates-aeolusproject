@@ -9,7 +9,8 @@ group :database do
   gem 'dm-validations'
   gem 'dm-migrations'
   gem 'dm-timestamps'
-  gem 'dm-mysql-adapter'
+  # @mfojtik: Why do you require mysql when it's not used ;-)
+  #gem 'dm-mysql-adapter'
   gem 'dm-sqlite-adapter'
 end
 

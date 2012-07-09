@@ -11,6 +11,7 @@ module Sinatra
           @current_user ||= @current_auth.user
         end
         return @current_user if @current_user
+      # @mfojtik: So why just don't catch the invalid cookie format exception :)
       rescue      # =>  Invalid cookie value formats?
         @current_user = nil
         @current_auth = nil
@@ -22,11 +23,15 @@ module Sinatra
     end
 
     def current_auth
+      # @mfojtik: What happen when 'current_user' will be nil?
       current_user
       @current_auth
     end
 
+    # @mfojtik: What is the return value of this method? If nothing, then I
+    # suggest to enhance it with '!'
     def authenticate
+      # @mfojtik: I think these two are equal: authentication_route = params[:name] || 'No auth...'
       authentication_route = params[:name] ? params[:name] : 'No authentication recognized (invalid callback)'
       # get the full hash from omniauth
       omniauth = request.env['omniauth.auth']
@@ -38,6 +43,7 @@ module Sinatra
       end
 
       # create a new regularised authentication hash
+      # @mfojtik: Hash.new? Are you a Java developer ? :)
       @authhash = Hash.new
       oaeuh = omniauth['extra'] && (omniauth['extra']['user_hash'] ||
                                     omniauth['extra']['raw_info'])
@@ -74,6 +80,7 @@ module Sinatra
         return '<pre>'+omniauth.to_yaml+'</pre>'
       end
 
+      # @mfojtik: What if @authhash fields are nil?
       if @authhash[:uid] == '' or @authhash[:provider] == ''
         flash[:error] = 'Error while authenticating via #{authentication_route}/#{@authhash[:provider].capitalize} The authentication returned invalid data for the user id.'
         redirect to(session[:return_to])

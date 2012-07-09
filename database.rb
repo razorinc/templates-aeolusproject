@@ -154,6 +154,7 @@ delimiter ;
 end
 # End
 
+# @mfojtik: This will erase the database everytime you start a server :)
 DataMapper.finalize
 DataMapper.auto_migrate!
 DataMapper.auto_upgrade!
