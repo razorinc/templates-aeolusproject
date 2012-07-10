@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 
 Bundler.require(:database)
-load "config.rb"
 require 'dm-migrations/migration_runner'
 
 DB_PATH=File.join(Dir.pwd,"templates.sqlite3")
 
-ataMapper::Logger.new(STDOUT, :debug) unless ENV['RACK_ENV'] == "production"
+DataMapper::Logger.new(STDOUT, :debug) unless ENV['RACK_ENV'] == "production"
 DataMapper.setup(:default, 'sqlite::memory:') if ENV['RACK_ENV']=="test"
 DataMapper.setup(:default, "sqlite:///#{DB_PATH}")
 DataMapper.setup(:default,
