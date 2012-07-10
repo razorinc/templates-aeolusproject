@@ -24,7 +24,7 @@ class AppBase < Sinatra::Base
 end
 
 class Application < AppBase
-  set :views, Proc.new{File.join(File.dirname(__FILE__),'views', name.downcase)}
+  set :views, File.join(File.dirname(__FILE__),'views', name.downcase)
 
   before do
     puts "authenticated? = #{authenticated?}"
@@ -32,7 +32,7 @@ class Application < AppBase
   end
 
   not_found do
-    haml ['%h1= Four Oh Four!', '%h2= Doh!'].join
+    haml(["%h1= Four Oh Four!", "%h2= Doh!"].join('\n'))
   end
 
   get '/' do
@@ -117,6 +117,11 @@ class Oauth < AppBase
     redirect to(session[:return_to])
   end
 
+  get '/auth/failure' do
+    flash[:error]="Authentication failure"
+    redirect to('/')
+  end
+  
   get '/sign_out' do
     session[:return_to] = request.referer || "/"
     session[:user_id]=nil
