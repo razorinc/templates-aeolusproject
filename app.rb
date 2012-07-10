@@ -33,7 +33,7 @@ class Application < AppBase
   end
 
   not_found do
-    haml(["%h1= Four Oh Four!", "%h2= Doh!"].join('\n'))
+    haml(["%h1 Four Oh Four!", "%h2 Doh!"].join('\n'))
   end
 
   get '/' do
