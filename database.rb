@@ -1,11 +1,17 @@
 # -*- coding: utf-8 -*-
 
 Bundler.require(:database)
+load "config.rb"
 require 'dm-migrations/migration_runner'
 
-DataMapper::Logger.new(STDOUT, :debug) unless ENV['RACK_ENV'] == "production"
+DB_PATH=File.join(Dir.pwd,"templates.sqlite3")
+
+ataMapper::Logger.new(STDOUT, :debug) unless ENV['RACK_ENV'] == "production"
 DataMapper.setup(:default, 'sqlite::memory:') if ENV['RACK_ENV']=="test"
-DataMapper.setup(:default, "sqlite:////#{Dir.pwd}/templates.sqlite3")
+DataMapper.setup(:default, "sqlite:///#{DB_PATH}")
+DataMapper.setup(:default,
+                "mysql://#{DB_USER}:#{DB_PASSWORD}@#{DB_SERVER}/#{DB_DATABASE}") if
+                    ENV["RACK_ENV"] == "production"
 
 class User
   include DataMapper::Resource
@@ -119,7 +125,7 @@ class Tag
   include DataMapper::Resource
 
   property :id,   Serial
-  property :name, String, :required=>true, :unique => true, :unique_index => true
+  property :name, String, :required=>true, :unique =>true, :unique_index =>true
   has n, :entry_tags
 
   has n, :entries,
@@ -128,7 +134,7 @@ end
 
 # - END
 
-# Migration to create the Trigger
+# Migration to create the Trigger (Valid in MySQL and SQLite)
 migration 1, :create_people_table do
   up do
     execute <<-EOF
@@ -155,5 +161,6 @@ end
 # End
 
 DataMapper.finalize
-DataMapper.auto_migrate!
+DataMapper.auto_migrate! unless DataMapper.repository(:default).
+                                adapter.storage_exists?('Authentication')
 DataMapper.auto_upgrade!
