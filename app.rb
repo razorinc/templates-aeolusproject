@@ -10,6 +10,7 @@ end
 
 require 'bundler/setup'
 Bundler.require(:web)
+require_relative 'configuration'
 require_relative 'helpers'
 require_relative 'database'
 
