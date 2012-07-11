@@ -5,3 +5,5 @@ TODO LIST
   facebook, etc (just set the ENV variables)
 
 * Improve/add views
+
+* Check that DB classes are consistent with the README.md

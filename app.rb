@@ -33,7 +33,10 @@ class Application < AppBase
   end
 
   not_found do
-    haml(["%h1 Four Oh Four!", "%h2 Doh!"].join('\n'))
+    haml(["%h1 Four Oh Four!",
+          "%h2 Doh!"
+         ].join('\n')
+         )
   end
 
   get '/' do
@@ -113,6 +116,7 @@ class Oauth < AppBase
   end
 
   get '/auth/:name/callback' do
+    puts params[:name]
     session[:return_to] = request.referer || "/"
     authenticate
     redirect to(session[:return_to])
