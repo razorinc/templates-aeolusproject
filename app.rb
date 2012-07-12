@@ -130,6 +130,7 @@ class Oauth < AppBase
   get '/sign_out' do
     session[:return_to] = request.referer || "/"
     session[:user_id]=nil
+    puts session.inspect
     redirect to(session[:return_to])
   end
 

@@ -20,8 +20,8 @@ group :web do
   #  gem 'sinatra-xsendfile'
   gem "json","~> 1.6.1" ,:require=> 'json/ext'
   gem 'omniauth'
-  gem 'omniauth-twitter',  :git => 'https://github.com/arunagw/omniauth-twitter.git'
-  gem 'omniauth-github',   :git => 'git://github.com/intridea/omniauth-github.git'
-  gem 'omniauth-openid',   :git => 'git://github.com/intridea/omniauth-openid.git'
-  gem 'omniauth-facebook', :git => "git://github.com/mkdynamic/omniauth-facebook.git"
+  gem 'omniauth-twitter' # :git => 'https://github.com/arunagw/omniauth-twitter.git'
+  gem 'omniauth-github'  # :git => 'git://github.com/intridea/omniauth-github.git'
+  gem 'omniauth-openid'  # :git => 'git://github.com/intridea/omniauth-openid.git'
+  gem 'omniauth-facebook' #:git => "git://github.com/mkdynamic/omniauth-facebook.git"
 end

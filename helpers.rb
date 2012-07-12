@@ -59,7 +59,7 @@ module Sinatra
         @authhash[:name] = oaui['name'] || ''
         @authhash[:uid] = (oaeuh['id'] || '').to_s
         @authhash[:provider] = omniauth['provider'] || ''
-      when 'google', 'yahoo', 'linked_in', 'twitter', 'myopenid', 'openid', 'open_id'
+      when 'google', 'yahoo', 'linked_in', 'myopenid', 'openid', 'open_id'
         @authhash[:email] = oaui['email'] || ''
         @authhash[:name] = oaui['name'] || ''
         @authhash[:uid] = (omniauth['uid'] || '').to_s
@@ -89,6 +89,7 @@ module Sinatra
           session[:authentication_provider] = auth.provider   # They're now signed in using the new account
           redirect to(session[:return_to])  # Already signed in, and we already had this authentication
         else
+          puts current_user.inspect
           auth = current_user.authentications.create!(:provider => @authhash[:provider], :uid => @authhash[:uid], :user_name => @authhash[:name], :user_email => @authhash[:email])
           flash[:notice] = 'Your ' + @authhash[:provider].capitalize + ' account has been added for signing in at this site.'
           session[:authentication_provider] = auth.provider   # They're now signed in using the new account
