@@ -26,7 +26,7 @@ end
 class Authentication
   include DataMapper::Resource
 
-  belongs_to :user, :key => true
+  belongs_to :user
 
   # Authentication provider:
   property :provider, String
