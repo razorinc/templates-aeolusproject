@@ -96,7 +96,7 @@ class Oauth < AppBase
     provider :openid, :store => OpenID::Store::Filesystem.new('./tmp')
     provider :twitter,  ENV['TWITTER_KEY'],  ENV['TWITTER_SECRET']
     provider :facebook, ENV['FACEBOOK_KEY'], ENV['FACEBOOK_SECRET']
-    provider :github,   ENV['GITHUB_KEY'],   ENV['GITHUB_SECRET'], :scope=>user
+    provider :github,   ENV['GITHUB_KEY'],   ENV['GITHUB_SECRET'], :scope=>'user'
   end
 
   before do
