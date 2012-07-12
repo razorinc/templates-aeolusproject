@@ -29,7 +29,7 @@ class Authentication
   belongs_to :user, :key => true
 
   # Authentication provider:
-  property :provider, String, :key => true
+  property :provider, String
 
   # User ID allocated by that provider:
   property :uid, String, :length => 240
