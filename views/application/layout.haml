@@ -1,0 +1,23 @@
+!!! 5
+%html
+  %head
+    %meta{:name => "viewport", :content => "width=device-width, initial-scale=1.0"}
+    %meta{:charset => "utf-8"}
+    %title
+      templates.aeolusproject.org - #{@action}
+
+    :plain
+      <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+      <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+      <![endif]-->
+
+    / Le styles
+    %link{ :href => "http://current.bootstrapcdn.com/bootstrap-v204/css/bootstrap-combined.min.css", :type => "text/css", :rel => "stylesheet" }
+    / add body padding styles
+    %link{ :href => "css/custom-styles.css", :type => "text/css", :rel => "stylesheet" }
+  
+  %body
+    =yield
+    
+  %script{:src=>"http://current.bootstrapcdn.com/bootstrap-v204/js/bootstrap.min.js", :type=>"text/javascript"}/

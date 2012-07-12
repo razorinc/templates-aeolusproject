@@ -1,3 +1,5 @@
+-@action="index"
+
 - if authenticated?
   %h2
     You're logged in #{session[:user_name]}!
@@ -12,7 +14,7 @@
 
 
 %h1
-  Hej indexu!
+  i'm the #index action!
 
   %p
     =flash[:notice]
