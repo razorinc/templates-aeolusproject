@@ -26,10 +26,10 @@ end
 class Authentication
   include DataMapper::Resource
 
-  belongs_to :user, :key => true
+  belongs_to :user
 
   # Authentication provider:
-  property :provider, String, :key => true
+  property :provider, String
 
   # User ID allocated by that provider:
   property :uid, String, :length => 240
