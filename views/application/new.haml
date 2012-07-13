@@ -1,0 +1,20 @@
+%h2
+  New Entry
+  
+%form.well
+  %control_group
+    %label{:class=>"control-label", :for=>"deployable_xml"}
+      Image deployable
+    %controls
+      %textarea.field.span6{:id=>"deployable_xml", :name=>"deployable",:rows=>"12"}
+      %p.help-block Example block-level help text here.
+      
+  %control_group
+    %label{:class=>"control-label", :for=>"image_xml"}
+      Image deployable
+    %controls
+      %textarea.field.span6{:id=>"image_xml", :name=>"image",:rows=>"12"}
+      %p.help-block Example block-level help text here.  
+    
+  %button.btn.btn-primary{:type => "submit"} Submit
+  %button.btn Cancel
