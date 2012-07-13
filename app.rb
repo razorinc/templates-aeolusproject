@@ -50,9 +50,9 @@ class Application < AppBase
   end
 
   get '/entry/new' do
-    haml :new_entry if authenticated?
     (flash[:error]="You're not authenticated";
      redirect to("/")) unless authenticated?
+    haml(:new) if authenticated?
   end
 
   post '/entry/new' do
@@ -63,8 +63,8 @@ class Application < AppBase
     entry = user.entries.create!(:name=>params[:name])
   end
 
-  get '/entry/:id' do
-    entry ||= Entry::first(:name=>params[:id])
+  get '/entry/:uuid' do
+    entry ||= Entry::first(:name=>params[:uuid])
     (flash[:error] = "The element wasn't found";
      redirect to(session[:return_to])) if entry.nil?
     haml :show_entry
@@ -104,15 +104,16 @@ class Oauth < AppBase
   end
 
   get '/' do
-    <<-HTML
-    <a href='/authenticate/auth/twitter'>Sign in with Twitter</a>
-    <a href='/auth/github'>Sign in with Github</a>
+    redirect to(session[:return_to])
+    # <<-HTML
+    # <a href='/authenticate/auth/twitter'>Sign in with Twitter</a>
+    # <a href='/auth/github'>Sign in with Github</a>
 
-    <form action='/test/auth/open_id' method='post'>
-      <input type='text' name='identifier'/>
-      <input type='submit' value='Sign in with OpenID'/>
-    </form>
-    HTML
+    # <form action='/test/auth/open_id' method='post'>
+    #   <input type='text' name='identifier'/>
+    #   <input type='submit' value='Sign in with OpenID'/>
+    # </form>
+    # HTML
   end
 
   get '/auth/:name/callback' do
