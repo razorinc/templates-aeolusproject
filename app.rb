@@ -45,7 +45,6 @@ class Application < AppBase
     @last_inserted = Entry.last_inserts
     # Default will be 5
     @most_requested = Entry.popular
-
     haml :index
   end
 
@@ -96,7 +95,7 @@ class Oauth < AppBase
     provider :openid, :store => OpenID::Store::Filesystem.new('./tmp')
     provider :twitter,  ENV['TWITTER_KEY'],  ENV['TWITTER_SECRET']
     provider :facebook, ENV['FACEBOOK_KEY'], ENV['FACEBOOK_SECRET']
-    provider :github,   ENV['GITHUB_KEY'],   ENV['GITHUB_SECRET'], :scope=>'user'
+    provider :github,   ENV['GITHUB_KEY'],   ENV['GITHUB_SECRET']
   end
 
   before do
@@ -127,7 +126,7 @@ class Oauth < AppBase
     flash[:error]="Authentication failure"
     redirect to('/')
   end
-  
+
   get '/sign_out' do
     session[:return_to] = request.referer || "/"
     session[:user_id]=nil
