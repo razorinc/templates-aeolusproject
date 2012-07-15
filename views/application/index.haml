@@ -7,18 +7,22 @@
 - else
   %h2
     %a{:href=>"/authenticate/auth/twitter"} Sign in with twitter
-    
+
     %a{:href=>"/authenticate/auth/github"} Sign in with github
-    
+
     %a{:href=>"/authenticate/auth/google"} Sign in with google
 
 
 %h1
   i'm the #index action!
 
-  %p
-    =flash[:notice]
-  %p
-    =flash[:warning]
-  %p
-    =flash[:error]
+%hr/
+
+/
+  =flash.inspect
+%div.alert-message
+  =flash[:notice]
+%p
+  =flash[:warning]
+%p
+  =flash[:error]
