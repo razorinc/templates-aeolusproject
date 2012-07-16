@@ -30,6 +30,7 @@ class Application < AppBase
   before do
     puts "authenticated? = #{authenticated?}"
     puts "return_to= #{session[:return_to]}"
+    puts %x{git rev-parse HEAD} if ENV['RACK_ENV'] == "development"
   end
 
   not_found do
