@@ -1,4 +1,6 @@
 module Sinatra
+
+  
   module AuthHelpers
 
     def current_user
