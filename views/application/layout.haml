@@ -27,7 +27,9 @@
             %span.icon-bar
             %span.icon-bar
             %span.icon-bar
-          %a.brand{:href => "/"} templates.aeolusproject.org
+          %a.brand{:href => "/"}
+            %img{:src=>"http://www.aeolusproject.org/images/aeolus_logo-header.png"}
+            templates.aeolusproject.org
           .nav-collapse
             %ul.nav
               %li.active
@@ -59,7 +61,8 @@
                         %li
                           %a{:href=>"/authenticate/auth/twitter"} Twitter
                         %li
-                          Openid
+                          %a{:href=>"/authenticate/auth/open_id"} OpenID
+
   %div.container
     =yield
 
