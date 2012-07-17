@@ -31,6 +31,7 @@ class Application < AppBase
     puts "authenticated? = #{authenticated?}"
     puts "return_to= #{session[:return_to]}"
     puts %x{git rev-parse HEAD} if ENV['RACK_ENV'] == "development"
+    session[:return_to] = request.referer || "/"
   end
 
   not_found do
@@ -60,7 +61,16 @@ class Application < AppBase
     # username, title
     # image template,deployable template,<< tags >>
     user = User::first(:id=>session[:user_id])
-    entry = user.entries.create!(:name=>params[:name])
+    entry = user.entries.create!
+    entry.image = Image.create!(:content=>params[:image])
+    entry.deployable = Deployable.create!(:content=>params[:deployable])
+    entry.save!
+    (flash[:notice] = "Your entry got added";
+     redirect to("/entry/#{entry.name}")
+     ) if entry.saved?
+    (flash[:error]  = "Your entry wasn't saved";
+     redirect to("/")
+     ) unless entry.saved?
   end
 
   get '/entry/:uuid' do
