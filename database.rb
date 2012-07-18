@@ -59,7 +59,7 @@ class Entry
 
 =begin
   has n, :post_tags
-  has n, :tags, :through => :post_tags
+  has n, :tags, :through => :entry_tags
 
   def tag_list
     tags.all.map { |t| t.name }.join(', ')
