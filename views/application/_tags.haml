@@ -1,0 +1,5 @@
+:javascript
+  var availableTags = [#{Tag.all.map { |t| "'#{t.name}'" }.join(',') }];
+  $(function() {
+    $("#tags").autocomplete({source: availableTags})
+  })

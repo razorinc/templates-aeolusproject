@@ -37,7 +37,7 @@ class Application < AppBase
   not_found do
     haml(["%h1 Four Oh Four!",
           "%h2 Doh!"
-         ].join('\n')
+         ].join('\n'), :layout=>false
          )
   end
 

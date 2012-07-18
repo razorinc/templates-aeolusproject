@@ -20,6 +20,13 @@
     / flash.inspect
 
   %body
+    -if flash[:notice]
+      .flash#notice
+        = flash[:notice]
+    -if flash[:error]
+      .flash#error
+        = flash[:error]
+          
     .navbar.navbar-fixed-top
       .navbar-inner
         .container
