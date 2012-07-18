@@ -16,8 +16,7 @@
     / Le styles
     %link{ :href => "http://current.bootstrapcdn.com/bootstrap-v204/css/bootstrap-combined.min.css", :type => "text/css", :rel => "stylesheet" }
     / add body padding styles
-    %link{ :href => "css/css_custom.css", :type => "text/css", :rel => "stylesheet" }
-    / flash.inspect
+    %link{ :href => "/css/css_custom.css", :type => "text/css", :rel => "stylesheet" }
 
   %body
     -if flash[:notice]
@@ -26,7 +25,7 @@
     -if flash[:error]
       .flash#error
         = flash[:error]
-          
+
     .navbar.navbar-fixed-top
       .navbar-inner
         .container
@@ -70,7 +69,7 @@
                         %li
                           %a{:href=>"/authenticate/auth/open_id"} OpenID
 
-    %div.container
+    .container
       =yield
 
 
