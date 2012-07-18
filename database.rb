@@ -58,7 +58,7 @@ class Entry
   belongs_to :user
 
 =begin
-  has n, :post_tags
+  has n, :entry_tags
   has n, :tags, :through => :entry_tags
 
   def tag_list
@@ -81,6 +81,10 @@ class Entry
     all(:order=>[ :created_at.desc ],:limit=>limit)
   end
 
+  def exists?
+    !id.nil?
+  end
+  
 end
 class Deployable
   include DataMapper::Resource

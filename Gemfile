@@ -16,6 +16,7 @@ end
 group :web do
   gem 'sinatra'
   gem 'haml'
+  gem 'sinatra-partial', :require => 'sinatra/partial'
   gem 'rack-flash3', :require=>"rack-flash"
   #  gem 'sinatra-xsendfile'
   gem "json","~> 1.6.1" ,:require=> 'json/ext'

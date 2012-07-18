@@ -22,6 +22,7 @@ class AppBase < Sinatra::Base
   use Rack::Session::Cookie
   use Rack::Flash, :sweep => true
   helpers Sinatra::AuthHelpers
+  register Sinatra::Partial
 end
 
 class Application < AppBase
@@ -53,15 +54,15 @@ class Application < AppBase
   get '/entry/new' do
     (flash[:error]="You're not authenticated";
      redirect to("/")) unless authenticated?
-    haml(:new) if authenticated?
+    haml(:new, :locals=>{:entry=>Entry.new(:deployable=>Deployable.new,:image=>Image.new)}) if authenticated?
   end
 
-  post '/entry/new' do
+  post '/entry' do
     # a new entry has:
     # username, title
     # image template,deployable template,<< tags >>
-    user = User::first(:id=>session[:user_id])
-    entry = user.entries.create!
+    current_user = User::first(:id=>session[:user_id])
+    entry = Entry::new(:user => current_user)
     entry.image = Image.create!(:content=>params[:image])
     entry.deployable = Deployable.create!(:content=>params[:deployable])
     entry.save!
@@ -78,6 +79,14 @@ class Application < AppBase
     (flash[:error] = "The element wasn't found";
      redirect to(session[:return_to])) if entry.nil?
     haml :show_entry
+  end
+
+  get '/entry/:uuid/edit' do
+    haml :edit_entry
+  end
+
+  put '/entry/:uuid' do
+    b;laa
   end
 
 
