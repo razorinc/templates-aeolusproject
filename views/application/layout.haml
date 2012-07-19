@@ -1,5 +1,4 @@
 !!! 5
-!!! XML
 %html{:lang=>"en"}
   %head
     %meta{:name => "viewport", :content => "width=device-width, initial-scale=1.0"}
@@ -72,17 +71,20 @@
     .container
       =yield
 
+      %footer
+        = settings.current_revision
 
-  %script{:src=>"https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js", :type=>"text/javascript"}
-  %script{:src=>"http://www.appelsiini.net/download/jquery.jeditable.mini.js", :type=>"text/javascript"}
-  %script{:src=>"http://current.bootstrapcdn.com/bootstrap-v204/js/bootstrap.min.js", :type=>"text/javascript"}
-  :javascript
-    $(function() {
-    // Setup drop down menu
-    $('.dropdown-toggle').dropdown();
-
-    // Fix input element click problem
-    $('.dropdown input, .dropdown label').click(function(e) {
-      e.stopPropagation();
+    %script{:src=>"https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js", :type=>"text/javascript"}
+    %script{:src=>"https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/jquery-ui.min.js", :type=>"text/javascript"}
+    %script{:src=>"http://www.appelsiini.net/download/jquery.jeditable.mini.js", :type=>"text/javascript"}
+    %script{:src=>"http://current.bootstrapcdn.com/bootstrap-v204/js/bootstrap.min.js", :type=>"text/javascript"}
+    :javascript
+      $(function() {
+      // Setup drop down menu
+      $('.dropdown-toggle').dropdown();
+  
+      // Fix input element click problem
+      $('.dropdown input, .dropdown label').click(function(e) {
+        e.stopPropagation();
+        });
       });
-    });

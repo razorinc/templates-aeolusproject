@@ -11,6 +11,7 @@ DataMapper.setup(:default, "sqlite:///#{DB_PATH}")
 DataMapper.setup(:default,
                 "mysql://#{DB_USER}:#{DB_PASSWORD}@#{DB_SERVER}/#{DB_DATABASE}") if
                     ENV["RACK_ENV"] == "production"
+DataMapper::Model.raise_on_save_failure = true
 
 class User
   include DataMapper::Resource
@@ -57,7 +58,6 @@ class Entry
   has 1, :image
   belongs_to :user
 
-=begin
   has n, :entry_tags
   has n, :tags, :through => :entry_tags
 
@@ -71,7 +71,10 @@ class Entry
       tags << new_tag
     end
   end
-=end
+
+  def self.bogus
+    new(:deployable=>Deployable.new, :image=>Image.new)
+  end
 
   def self.popular(limit = 5)
     all(:rating.gt=>3, :order => [ :rating.desc ], :limit=>limit)
@@ -92,6 +95,7 @@ class Deployable
   property :id, Serial
   property :content, Text
 
+  belongs_to :entry
 end
 
 class Image
@@ -99,6 +103,8 @@ class Image
 
   property :id, Serial
   property :content, Text
+
+  belongs_to :entry
 end
 
 class Comment
@@ -164,5 +170,6 @@ end
 # End
 
 DataMapper.finalize
-DataMapper.auto_migrate! unless DataMapper.repository(:default).adapter.storage_exists?('Authentication')
+DataMapper.auto_migrate! unless DataMapper.repository(:default).adapter
+                                  .storage_exists?('authentications')
 DataMapper.auto_upgrade!

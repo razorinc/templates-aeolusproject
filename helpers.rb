@@ -1,5 +1,14 @@
 module Sinatra
 
+  module ViewHelpers
+    def linkify_entry(element)
+      haml("%a{:href=>'/entry/#{element.name}'} #{element.name}")
+    end
+
+    def download_element(element,kind)
+      haml("%a{:href=>'/entry/#{element.name}/raw/#{kind}.xml'} #{kind}")
+    end
+  end
   
   module AuthHelpers
 
@@ -144,7 +153,7 @@ module Sinatra
 
     def authenticated?
       ! session[:user_id].nil?
-      session[:user_id]="test" && true if ENV["RACK_ENV"]=="development"
+      session[:user_id]="49fa6269-bb4b-40df-8a6b-3f18a17622a1" and true if ENV["RACK_ENV"]=="development"
     end
   end
 end

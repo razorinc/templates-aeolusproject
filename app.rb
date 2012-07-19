@@ -22,7 +22,11 @@ class AppBase < Sinatra::Base
   use Rack::Session::Cookie
   use Rack::Flash, :sweep => true
   helpers Sinatra::AuthHelpers
+  helpers Sinatra::ViewHelpers
   register Sinatra::Partial
+
+  set :current_revision, %x{git rev-parse HEAD} 
+
 end
 
 class Application < AppBase
@@ -31,7 +35,6 @@ class Application < AppBase
   before do
     puts "authenticated? = #{authenticated?}"
     puts "return_to= #{session[:return_to]}"
-    puts %x{git rev-parse HEAD} if ENV['RACK_ENV'] == "development"
     session[:return_to] = request.referer || "/"
   end
 
@@ -45,64 +48,72 @@ class Application < AppBase
   get '/' do
     puts "DEBUG: #{session.inspect}" unless ENV['DEBUG_IT'].nil?
     # Default will be 5
-    @last_inserted = Entry.last_inserts
-    # Default will be 5
-    @most_requested = Entry.popular
-    haml :index
+#    @last_inserted = 
+#    # Default will be 5
+#    @most_requested = Entry.popular
+    haml(:index, :locals => {:last_inserted=>Entry.last_inserts,
+                             :most_requested=>Entry.popular })
   end
 
   get '/entry/new' do
     (flash[:error]="You're not authenticated";
      redirect to("/")) unless authenticated?
-    haml(:new, :locals=>{:entry=>Entry.new(:deployable=>Deployable.new,:image=>Image.new)}) if authenticated?
+    haml(:new, :locals=>{:entry=>Entry.bogus}) if authenticated?
   end
 
   post '/entry' do
-    # a new entry has:
+    # a new entry has
     # username, title
     # image template,deployable template,<< tags >>
     current_user = User::first(:id=>session[:user_id])
-    entry = Entry::new(:user => current_user)
-    entry.image = Image.create!(:content=>params[:image])
-    entry.deployable = Deployable.create!(:content=>params[:deployable])
-    entry.save!
-    (flash[:notice] = "Your entry got added";
-     redirect to("/entry/#{entry.name}")
-     ) if entry.saved?
-    (flash[:error]  = "Your entry wasn't saved";
+    entry = current_user.entries.new
+    entry.image = Image.new(:content=>params[:image])
+    entry.deployable = Deployable.new(:content=>params[:deployable])
+    begin
+      entry.save
+    rescue DataMapper::SaveFailureError => e
+      puts "[DEBUG] Your entry wasn't saved: #{entry.errors.values.join(', ')}"
+      flash[:error] = "Your entry wasn't saved<BR/>#{entry.errors.values.join(', ')} ";
+    rescue StandardError => e
+      flash[:error] ="Got an error trying to save the article #{e.to_s}"
      redirect to("/")
-     ) unless entry.saved?
+    end
+    
+    flash[:notice] = "Your entry got added"
+    redirect to("/entry/#{entry.name}")
   end
 
   get '/entry/:uuid' do
     entry ||= Entry::first(:name=>params[:uuid])
     (flash[:error] = "The element wasn't found";
      redirect to(session[:return_to])) if entry.nil?
-    haml :show_entry
+    haml :show_entry, :locals=>{:entry=>entry}
   end
 
   get '/entry/:uuid/edit' do
-    haml :edit_entry
+    haml :edit
   end
 
   put '/entry/:uuid' do
-    b;laa
+    # same beef
   end
 
 
   get %r{/entry/([^\/?#]+)/raw/(image|deployable).xml} do |entry, kind|
-    element ||= Entry::first(:name=>params[:id])
-    halt 404 if element.nil?
+    element ||= Entry::first(:name=>entry)
+    halt 404 if entry.nil?
 
     case kind
       when "image"
-        entry.image.content || "ERROR"
+        @output=element.image.content || "ERROR"
       when "deployable"
-        entry.deployable.content || "ERROR"
+        @output=element.deployable.content || "ERROR"
       else
         halt 404
     end
     "#{kind} = #{entry}" unless ENV['DEBUG_IT'].nil?
+    content_type "text/xml"
+    @output
   end
 
 end

@@ -1,20 +1,25 @@
 %form.well{:method=>"POST", :action=>"/entry"}
   %input{ :type=>"hidden", :name=>"name", :value=>entry.name }
   - if entry.exists?
-    %input{ :type => :hidden, :name => '_method', :value => :put}    
-  %control_group
+    %input{ :type => :hidden, :name => '_method', :value => :put}
+  .control_group
     %label{:class=>"control-label", :for=>"deployable_xml"}
-      Image deployable
-    %controls
+      Template deployable
+    .controls
       %textarea.field.span6{:id=>"deployable_xml", :name=>"deployable",:rows=>"12", :value=>entry.deployable.content}
-      %p.help-block Example block-level help text here.
-      
-  %control_group
+
+  .control_group
     %label{:class=>"control-label", :for=>"image_xml"}
       Image deployable
-    %controls
+    .controls
       %textarea.field.span6{:id=>"image_xml", :name=>"image",:rows=>"12", :value=>entry.image.content}
-      %p.help-block Example block-level help text here.  
-    
-  %button.btn.btn-primary{:type => "submit"} Submit
-  %button.btn Cancel
+
+  .control_group
+    %label{:class=>"control-label", :for=>"tag_list"}
+      Tags:
+    .controls
+      %input.span6.field{:id=>"tag_list", :name=>"tag_list",:value=>entry.tag_list}
+
+  .form-actions
+    %button.btn.btn-primary{:type => "submit"} Submit
+    %button.btn Cancel

@@ -7,8 +7,28 @@
 /
   =flash.class
 %div.alert-message
-  =flash[:notice]
-%p
-  =flash[:warning]
-%p
-  =flash[:error]
+  %p
+    =flash[:notice]
+  %p
+    =flash[:warning]
+  %p
+    =flash[:error]
+
+.row
+  .span4
+    - unless last_inserted.nil?
+      %ul
+        - last_inserted.each do |entry|
+          %li
+            %span
+              = linkify_entry entry
+            %span
+              = download_element(entry,"image") 
+            %span
+              = download_element(entry,"deployable") 
+          
+
+  .span4
+    Due
+  .span4
+    Tre
