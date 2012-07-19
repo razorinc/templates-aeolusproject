@@ -1,0 +1,16 @@
+%h2
+  Entry: #{entry.name}
+
+%span
+  %h3
+    Tags
+  %span.tag_list= entry.tag_list
+
+%h3
+  Deployable template
+
+%pre= entry.deployable.content
+
+%h3
+  Image template
+%pre= entry.image.content
