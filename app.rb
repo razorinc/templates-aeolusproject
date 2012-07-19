@@ -69,6 +69,7 @@ class Application < AppBase
     entry = current_user.entries.new
     entry.image = Image.new(:content=>params[:image])
     entry.deployable = Deployable.new(:content=>params[:deployable])
+    entry.tag_list = params[:tag_list].split(/\s?,\s?/).map{|x| x.capitalize}
     begin
       entry.save
     rescue DataMapper::SaveFailureError => e
