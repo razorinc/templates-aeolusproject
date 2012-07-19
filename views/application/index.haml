@@ -15,7 +15,10 @@
     =flash[:error]
 
 .row
-  .span4
+  .span5
+    %h3
+      Last 5 entries
+
     - unless last_inserted.nil?
       %ul
         - last_inserted.each do |entry|
@@ -28,7 +31,8 @@
               = download_element(entry,"deployable") 
           
 
-  .span4
-    Due
-  .span4
+  .span5
+    %h3
+      Most downloaded entries
+  .span2{:style=>"background: red"}
     Tre

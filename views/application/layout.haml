@@ -72,6 +72,7 @@
       =yield
 
       %footer
+        git revision:
         = settings.current_revision
 
     %script{:src=>"https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js", :type=>"text/javascript"}
@@ -82,7 +83,6 @@
       $(function() {
       // Setup drop down menu
       $('.dropdown-toggle').dropdown();
-  
       // Fix input element click problem
       $('.dropdown input, .dropdown label').click(function(e) {
         e.stopPropagation();
