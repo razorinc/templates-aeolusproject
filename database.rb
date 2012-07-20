@@ -22,6 +22,9 @@ class User
   has n, :authentications
   has n, :entries
 
+  def is_owner?(name)
+    ! entries.first(:name=>name,:user_id=>id).nil?
+  end
 end
 
 class Authentication
@@ -71,6 +74,7 @@ class Entry
       tags << new_tag
     end
   end
+
 
   def self.bogus
     new(:deployable=>Deployable.new, :image=>Image.new)

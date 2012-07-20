@@ -17,6 +17,8 @@ require_relative 'database'
 class AppBase < Sinatra::Base
   set :static, true
   set :public_folder, File.join(File.dirname(__FILE__),'public') # was Proc.new
+  
+  set :session_secret, "ilovesinatra" 
 
   enable :sessions
   use Rack::Session::Cookie
@@ -26,6 +28,17 @@ class AppBase < Sinatra::Base
   register Sinatra::Partial
 
   set :current_revision, %x{git rev-parse HEAD} 
+
+  set(:auth) do |bool|
+    condition do
+      puts "i'm :auth and i'm currently running!"
+      unless authenticated?
+        puts "and I can tell you're not currently authenticated!"
+        flash[:error] = "You're currently not logged in"
+        redirect "/", 303
+      end
+    end
+  end
 
 end
 
@@ -37,6 +50,8 @@ class Application < AppBase
     puts "return_to= #{session[:return_to]}"
     session[:return_to] = request.referer || "/"
   end
+
+
 
   not_found do
     haml(["%h1 Four Oh Four!",
@@ -51,17 +66,19 @@ class Application < AppBase
 #    @last_inserted = 
 #    # Default will be 5
 #    @most_requested = Entry.popular
-    haml(:index, :locals => {:last_inserted=>Entry.last_inserts,
-                             :most_requested=>Entry.popular })
+    haml(:index, :locals => {:last_inserted=>Entry::last_inserts,
+                      :most_requested=>Entry::popular,
+                      :current_user => User::first(session[:user_id])
+                      })
   end
 
-  get '/entry/new' do
-    (flash[:error]="You're not authenticated";
-     redirect to("/")) unless authenticated?
-    haml(:new, :locals=>{:entry=>Entry.bogus}) if authenticated?
+  get '/entry/new', :auth=>true do
+#    (flash[:error]="You're not authenticated";
+#     redirect to("/")) unless authenticated?
+    haml(:new, :locals=>{:entry=>Entry.bogus}) #if authenticated?
   end
 
-  post '/entry' do
+  post '/entry', :auth=>true do
     # a new entry has
     # username, title
     # image template,deployable template,<< tags >>
@@ -91,18 +108,20 @@ class Application < AppBase
     haml :show_entry, :locals=>{:entry=>entry}
   end
 
-  get '/entry/:uuid/edit' do
-    haml :edit
+  get '/entry/:uuid/edit', :auth=>true do |uuid|
+    current_user = User::first(:id=>session[:user_id])
+    haml :edit, :locals=>{:entry=> current_user.entries.first(:name=>uuid)
+                         } if current_user.is_owner?(uuid)
   end
 
-  put '/entry/:uuid' do
+  put '/entry' do
     # same beef
   end
 
 
   get %r{/entry/([^\/?#]+)/raw/(image|deployable).xml} do |entry, kind|
     element ||= Entry::first(:name=>entry)
-    halt 404 if entry.nil?
+    halt 404 if element.nil?
 
     case kind
       when "image"
@@ -160,10 +179,11 @@ class Oauth < AppBase
   end
 
   get '/sign_out' do
-    session[:return_to] = request.referer || "/"
-    session[:user_id]=nil
+    return_to = request.referer || "/"
+#    session[:user_id]=nil
+    session.clear
     puts session.inspect
-    redirect to(session[:return_to])
+    redirect to(return_to)
   end
 
 end

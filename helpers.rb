@@ -8,8 +8,13 @@ module Sinatra
     def download_element(element,kind)
       haml("%a{:href=>'/entry/#{element.name}/raw/#{kind}.xml'} #{kind}")
     end
+
+    def edit_entry(element)
+      haml("%a{:href=>'/entry/#{element.name}/edit'} Edit")
+    end
+
   end
-  
+
   module AuthHelpers
 
     def current_user
