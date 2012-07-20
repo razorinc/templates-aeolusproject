@@ -63,7 +63,8 @@ footer {
    cursor: pointer;
    display: block;
 }
-.ui-menu .ui-menu-item a:hover{
+
+.ui-menu .ui-menu-item a:hover {
   background-color: #007bcc;
   color: white;
   text-decoration: none;
