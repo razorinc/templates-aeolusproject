@@ -17,8 +17,9 @@ require_relative 'database'
 class AppBase < Sinatra::Base
   set :static, true
   set :public_folder, File.join(File.dirname(__FILE__),'public') # was Proc.new
-  
-  set :session_secret, "ilovesinatra" 
+  configure :development do
+    set :session_secret, "ilovesinatra"
+  end
 
   enable :sessions
   use Rack::Session::Cookie
@@ -70,6 +71,10 @@ class Application < AppBase
                       :most_requested=>Entry::popular,
                       :current_user => User::first(session[:user_id])
                       })
+  end
+
+  get '/entry/list' do
+    haml(:list, :locals=>{:entries=>Entry::all})
   end
 
   get '/entry/new', :auth=>true do
