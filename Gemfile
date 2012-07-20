@@ -2,6 +2,7 @@ source :rubygems
 
 gem "thin"
 gem "system_timer", :platforms => :ruby_18
+gem "bigdecimal"
 
 group :database do
   gem 'uuidtools'
