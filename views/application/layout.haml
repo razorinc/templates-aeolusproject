@@ -72,8 +72,9 @@
       =yield
 
       %footer
-        git revision:
-        = settings.current_revision
+        git revision: 
+        %a{:href=>"https://github.com/razorinc/templates-aeolusproject/commits/#{settings.current_revision}"}
+          = settings.current_revision
 
     %script{:src=>"https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js", :type=>"text/javascript"}
     %script{:src=>"https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/jquery-ui.min.js", :type=>"text/javascript"}
