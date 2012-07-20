@@ -28,8 +28,10 @@
             %span
               = download_element(entry,"image") 
             %span
-              = download_element(entry,"deployable") 
-          
+              = download_element(entry,"deployable")
+            -unless current_user.nil? && (! current_user.is_owner?(entry) )
+              %span
+                = edit_entry(entry) 
 
   .span5
     %h3

@@ -1,3 +1,6 @@
+/ 
+  =entry.deployable.inspect
+
 %form.well{:method=>"POST", :action=>"/entry"}
   %input{ :type=>"hidden", :name=>"name", :value=>(entry.name ||"")}
   - if entry.exists?
@@ -6,14 +9,14 @@
     %label{:class=>"control-label", :for=>"deployable_xml"}
       Template deployable
     .controls
-      %textarea.field.span6{:id=>"deployable_xml", :name=>"deployable",:rows=>"12", :value=>(entry.deployable.content || "")}
-
+      %textarea.field.span6{:id=>"deployable_xml", :name=>"deployable",:rows=>"12"}
+        = (entry.deployable.content || "")
   .control_group
     %label{:class=>"control-label", :for=>"image_xml"}
       Image deployable
     .controls
-      %textarea.field.span6{:id=>"image_xml", :name=>"image",:rows=>"12", :value=>(entry.image.content || "")}
-
+      %textarea.field.span6{:id=>"image_xml", :name=>"image",:rows=>"12"}
+        = (entry.image.content || "")
   .control_group
     %label{:class=>"control-label", :for=>"tag_list"}
       Tags:
