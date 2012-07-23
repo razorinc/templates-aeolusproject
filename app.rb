@@ -115,7 +115,6 @@ class Application < AppBase
   end
 
   get '/entry/:uuid/edit', :auth=>true do |uuid|
-    puts "I'm edit GET"
     current_user = User::first(:id=>session[:user_id])
     entry = current_user.entries.first(:name=>uuid)
     haml :edit, :locals=>{:entry=> entry
@@ -131,7 +130,6 @@ class Application < AppBase
                 )
     halt 403 unless current_user.is_owner?(entry)
   end
-
 
   get %r{/entry/([^\/?#]+)/raw/(image|deployable).xml} do |entry, kind|
     element ||= Entry::first(:name=>entry)

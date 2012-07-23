@@ -84,3 +84,7 @@ footer {
   TODO!
 */
 .flash-container{position:fixed;top:60px;right:5px;z-index:99999}.flash-container .alert{margin-bottom:5px}.modal .flash-container{position:relative;top:0;right:0}.modal .flash-container .alert{-webkit-border-radius:0;-moz-border-radius:0;border-radius:0;margin-bottom:0}.modal .flash-container .close{opacity:0.2}.modal .flash-container .close:hover{opacity:0.4}
+
+#title {
+  display: inline-block;
+}
