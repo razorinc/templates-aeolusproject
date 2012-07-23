@@ -10,7 +10,7 @@
 .row
   .span5
     %h3
-      Last 5 entries
+      Latest entries
 
     - unless last_inserted.nil?
       %ul
@@ -19,12 +19,9 @@
             %span
               = linkify_entry entry
             %span
-              = download_element(entry,"image") 
+              = download_element(entry,"image")
             %span
               = download_element(entry,"deployable")
-            -unless current_user.nil? && (! current_user.is_owner?(entry) )
-              %span
-                = edit_entry(entry) 
 
   .span5
     %h3

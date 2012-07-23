@@ -1,10 +1,21 @@
-%h2
-  Entry: #{entry.name}
+%h2#title
+  #{entry.name}
 
-%span
-  %h3
-    Tags
-  %span.tag_list= entry.tag_list
+-unless current_user.nil?
+  /
+    I am here!
+  -if current_user.is_owner?(entry.uuid)
+    %span
+      %a{:href=>"/entry/#{entry.name}/edit"}
+        %i.icon-edit
+        %button.btn
+          Edit
+
+
+%h3
+  Tags
+%span.tag_list
+  = entry.tag_list
 
 %h3
   Deployable template
@@ -13,4 +24,5 @@
 
 %h3
   Image template
+
 %pre= entry.image.content

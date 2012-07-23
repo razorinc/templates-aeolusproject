@@ -1,8 +1,8 @@
-/ 
+/
   =entry.deployable.inspect
 
 %form.well{:method=>"POST", :"accept-charset"=>"UTF-8", :enctype=>"multipart/form-data", :action=>"/entry"}
-  %input{ :type=>"hidden", :name=>"name", :value=>(entry.name ||"")}
+  %input{ :type=>"hidden", :name=>"uuid", :value=>(entry.uuid ||"")}
   - if entry.exists?
     %input{ :type => :hidden, :name => '_method', :value => :put}
 
