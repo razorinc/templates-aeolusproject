@@ -1,6 +1,7 @@
 module Sinatra
 
   module ViewHelpers
+
     def linkify_entry(element)
       haml("%a{:href=>'/entry/#{element.name}'} #{element.name}")
     end

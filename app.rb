@@ -52,8 +52,6 @@ class Application < AppBase
     session[:return_to] = request.referer || "/"
   end
 
-
-
   not_found do
     haml(["%h1 Four Oh Four!",
           "%h2 Doh!"
@@ -119,8 +117,10 @@ class Application < AppBase
                          } if current_user.is_owner?(uuid)
   end
 
-  put '/entry' do
+  put '/entry', :auth=>true do
     # same beef
+    puts params.inspect
+    halt 418
   end
 
 
@@ -187,7 +187,7 @@ class Oauth < AppBase
     return_to = request.referer || "/"
 #    session[:user_id]=nil
     session.clear
-    puts session.inspect
+    puts "Session: #{session.inspect}"
     redirect to(return_to)
   end
 
