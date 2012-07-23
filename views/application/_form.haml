@@ -1,10 +1,11 @@
 / 
   =entry.deployable.inspect
 
-%form.well{:method=>"POST", :action=>"/entry"}
+%form.well{:method=>"POST", :"accept-charset"=>"UTF-8", :enctype=>"multipart/form-data", :action=>"/entry"}
   %input{ :type=>"hidden", :name=>"name", :value=>(entry.name ||"")}
   - if entry.exists?
     %input{ :type => :hidden, :name => '_method', :value => :put}
+
   .control_group
     %label{:class=>"control-label", :for=>"deployable_xml"}
       Template deployable
@@ -21,7 +22,7 @@
     %label{:class=>"control-label", :for=>"tag_list"}
       Tags:
     .controls
-      %input.field.span6{:id=>"tag_list", :name=>"tag_list",:value=>(entry.tag_list || "")}
+      %input.field.span6{:type=>"text", :id=>"tag_list", :name=>"tag_list",:value=>(entry.tag_list || "")}
 
   .form-actions
     %button.btn.btn-primary{:type => "submit"} Submit
