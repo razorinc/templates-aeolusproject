@@ -65,8 +65,8 @@ class Application < AppBase
 #    @last_inserted = 
 #    # Default will be 5
 #    @most_requested = Entry.popular
-    haml(:index, :locals => {:last_inserted=>Entry::last_inserts,
-                      :most_requested=>Entry::popular,
+    haml(:index, :locals => {:last_inserted=>Entry::last_inserts(10),
+                      :most_requested=>Entry::popular(10),
                       :current_user => User::first(session[:user_id])
                       })
   end
@@ -108,19 +108,28 @@ class Application < AppBase
     entry ||= Entry::first(:name=>params[:uuid])
     (flash[:error] = "The element wasn't found";
      redirect to(session[:return_to])) if entry.nil?
-    haml :show_entry, :locals=>{:entry=>entry}
+    haml :show_entry, :locals=>{:entry=>entry,
+                                :current_user=>(User::first(
+                                                      :id=>session[:user_id]))
+                                }
   end
 
   get '/entry/:uuid/edit', :auth=>true do |uuid|
+    puts "I'm edit GET"
     current_user = User::first(:id=>session[:user_id])
-    haml :edit, :locals=>{:entry=> current_user.entries.first(:name=>uuid)
-                         } if current_user.is_owner?(uuid)
+    entry = current_user.entries.first(:name=>uuid)
+    haml :edit, :locals=>{:entry=> entry
+                         } if current_user.is_owner?(entry.uuid)
   end
 
   put '/entry', :auth=>true do
-    # same beef
-    puts params.inspect
-    halt 418
+    current_user = User::first(:id=>session[:user_id])
+    entry = current_user.entries.first(:name=>params[:uuid])
+    entry.update(:name=>params[:name], 
+                  :"deployable.content"=>params[:deployable],
+                  :"image.content"=>params[:image]
+                )
+    halt 403 unless current_user.is_owner?(entry)
   end
 
 

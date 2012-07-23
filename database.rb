@@ -22,8 +22,8 @@ class User
   has n, :authentications
   has n, :entries
 
-  def is_owner?(name)
-    ! entries.first(:name=>name,:user_id=>id).nil?
+  def is_owner?(uuid)
+    ! entries.first(:uuid=>uuid,:user_id=>id).nil?
   end
 end
 
@@ -48,7 +48,8 @@ class Entry
 
   property :id, Serial
 
-  property :name, String, :key => true,
+  property :name, String, :default=>Proc.new { UUIDTools::UUID.random_create}
+  property :uuid, String, :key => true,
                           :required => true,
                           :default =>proc { UUIDTools::UUID.random_create }
   property :rating, Decimal, :default => 0 , :writer=> :protected
