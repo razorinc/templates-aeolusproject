@@ -89,7 +89,7 @@ class Application < AppBase
     entry = current_user.entries.new
     entry.image = Image.new(:content=>params[:image])
     entry.deployable = Deployable.new(:content=>params[:deployable])
-    entry.tag_list = params[:tag_list].split(/\s?,\s?/).map{|x| x.capitalize}
+    entry.tag_list = params[:tag_list].split(/\s?,\s?/).map(&:capitalize)
     begin
       entry.save
     rescue DataMapper::SaveFailureError => e
@@ -110,7 +110,7 @@ class Application < AppBase
      redirect to(session[:return_to])) if entry.nil?
     haml :show_entry, :locals=>{:entry=>entry,
                                 :current_user=>(User::first(
-                                                      :id=>session[:user_id]))
+                                             :id=>session[:user_id]))
                                 }
   end
 
@@ -204,5 +204,10 @@ class Api < Sinatra::Base
 
   get '/' do
     "I was too lazy for this...Nothing here yet!"
+  end
+
+  get '/search/' do
+    Entry.search(params[:q].split(/\s?,\s?/).map(&:capitalize)
+
   end
 end

@@ -89,6 +89,11 @@ class Entry
     all(:order=>[ :created_at.desc ],:limit=>limit)
   end
 
+  def self.search(*tags)
+    nil unless tags.empty?
+    all(:"entry_tags.tag.name"=>tags,:order=> [ :rating.desc ] )
+  end
+
   def exists?
     !id.nil?
   end
