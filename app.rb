@@ -208,6 +208,5 @@ class Api < Sinatra::Base
 
   get '/search/' do
     Entry.search(params[:q].split(/\s?,\s?/).map(&:capitalize)
-
   end
 end
