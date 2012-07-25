@@ -97,8 +97,10 @@ class Entry
   def exists?
     !id.nil?
   end
-  
+
 end
+
+
 class Deployable
   include DataMapper::Resource
 
