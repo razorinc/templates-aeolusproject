@@ -20,9 +20,11 @@
 %h3
   Deployable template
 
-%pre= entry.deployable.content
+%pre
+  %code= entry.deployable.content
 
 %h3
   Image template
 
-%pre= entry.image.content
+%pre
+  %code= entry.image.content
