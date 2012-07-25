@@ -166,7 +166,7 @@ class Oauth < AppBase
   end
 
   get '/' do
-    redirect to(session[:return_to])
+    redirect to("/")
     # <<-HTML
     # <a href='/authenticate/auth/twitter'>Sign in with Twitter</a>
     # <a href='/auth/github'>Sign in with Github</a>
@@ -191,11 +191,9 @@ class Oauth < AppBase
   end
 
   get '/sign_out' do
-    return_to = request.referer || "/"
 #    session[:user_id]=nil
     session.clear
-    puts "Session: #{session.inspect}"
-    redirect to(return_to)
+    redirect to("/")
   end
 
 end
@@ -206,7 +204,8 @@ class Api < Sinatra::Base
     "I was too lazy for this...Nothing here yet!"
   end
 
-  get '/search/' do
+  get '/search' do
+    halt 404 if params[:q].nil?
     Entry.search(params[:q].split(/\s?,\s?/).map(&:capitalize))
   end
 end

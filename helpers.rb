@@ -100,7 +100,7 @@ module Sinatra
                                     :uid => @authhash[:uid])
       # if the user is currently signed in, he/she might want to add
       # another account to signin
-      if current_user.nil?
+      unless current_user.nil?
         if auth
           flash[:notice] = "You are now signed in using your #{@authhash[:provider].capitalize} account"
           session[:user_id] ||= auth.user.id
@@ -159,7 +159,6 @@ module Sinatra
 
     def authenticated?
       ! session[:user_id].nil?
-      session[:user_id]="49fa6269-bb4b-40df-8a6b-3f18a17622a1" and true if ENV["RACK_ENV"]=="development"
     end
   end
 end
