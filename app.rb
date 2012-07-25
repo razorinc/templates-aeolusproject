@@ -21,6 +21,10 @@ class AppBase < Sinatra::Base
     set :session_secret, "ilovesinatra"
   end
 
+  configure :production do
+   set :haml, { :ugly=>true }
+  end
+
   enable :sessions
   use Rack::Session::Cookie
   use Rack::Flash, :sweep => true
